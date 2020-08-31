@@ -98,14 +98,18 @@ display(tdf)
 
 // COMMAND ----------
 
-tdf.schema
+tdf.show(2)
 
 // COMMAND ----------
 
 def dropUseless(dataFrame: DataFrame): DataFrame = {
     dataFrame.drop(
       "year",
+      "passenger_count",
+      "month",
+      "vendor_id",
       "is_weekend",
+      "trip_distance",
       "store_and_fwd")
   }
 
@@ -135,7 +139,8 @@ tdf.head
 
 // COMMAND ----------
 
-
+// MAGIC %sql
+// MAGIC select * from taxi
 
 // COMMAND ----------
 
@@ -149,11 +154,11 @@ tdf.head
 
 // COMMAND ----------
 
-display(tdf.select("passenger_count", "h_distance","fare_amount","trip_time", "pickup_latitude", "pickup_longitude", "dropoff_latitude", "dropoff_longitude").describe())
+display(tdf.select( "h_distance","fare_amount","trip_time", "pickup_latitude", "pickup_longitude", "dropoff_latitude", "dropoff_longitude").describe())
 
 // COMMAND ----------
 
-tdf.select("passenger_count", "h_distance","fare_amount","trip_time").describe().show
+tdf.select("h_distance","fare_amount","trip_time").describe().show
 
 // COMMAND ----------
 
@@ -233,7 +238,7 @@ sortedMap.collect{
 // MAGIC import seaborn as sns
 // MAGIC try:
 // MAGIC   tdf
-// MAGIC except NameError: # Looks for local table if bostonDF not defined
+// MAGIC except NameError: # Looks for local table if not defined
 // MAGIC   tdf= spark.table("taxi")
 // MAGIC 
 // MAGIC assembler = VectorAssembler(inputCols=tdf.columns, outputCol="features")
